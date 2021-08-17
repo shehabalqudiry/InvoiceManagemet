@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\SectionController;
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,8 +22,13 @@ Route::get('/', function () {
 });
 Auth::routes(['register' => false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['middleware' => 'auth'], function () {
+    
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
+    Route::resource('invoices', InvoiceController::class);
+    
+    Route::resource('sections', SectionController::class);
 
-Route::resource('invoices', InvoiceController::class);
-
-Route::get('/{page}', [AdminController::class, 'index']);
+    Route::get('/{page}', [AdminController::class, 'index']);
+});
