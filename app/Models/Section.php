@@ -9,7 +9,12 @@ class Section extends Model
 {
     use HasFactory;
 
-    public $guarded = [];
+    protected $guarded = [];
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'section');
+    }
 
     public function products()
     {

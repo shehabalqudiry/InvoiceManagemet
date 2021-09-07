@@ -3,7 +3,7 @@
     <button class="close" data-dismiss="alert" type="button" aria-label="close">
         <span aria-hidden="true">&times;</span>
     </button>
-    <strong>{{ session()->get('Error') }}</strong>
+    <strong>{{ session()->get('error') }}</strong>
 </div>
 @elseif(session()->has('success'))
 <div class="text-center alert alert-success alert-dismissible fade show" role="alert">

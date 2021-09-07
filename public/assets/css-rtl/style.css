@@ -1,15 +1,6 @@
 /*------------------------------------------------------------------
 [Master Stylesheet]
 
-Project        :   VALEX - HTML5 Bootstrap Admin Template
-Version        :   V.1
-Create Date    :   09/05/20
-Copyright      :   Spruko Technologies Private Limited 
-Author         :   SprukoSoft
-Author URL     :   https://themeforest.net/user/sprukosoft
-Support	       :   support@spruko.com
-License        :   Licensed under ThemeForest License
-
 -------------------------------------------------------------------*/
 /*
 1.  Accordions
@@ -48,7 +39,7 @@ License        :   Licensed under ThemeForest License
 34. Spectrum
 35. Calendar
 36. Chat
-37 Contacts
+37. Contacts
 38. Error
 39. Invoice
 40. Mail
@@ -82,7 +73,7 @@ License        :   Licensed under ThemeForest License
 */
 /* ######## FONT ######## */
 /* ############### FONTS IMPORT ############### */
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900");
+/*@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900");*/
 /* ######## BOOTSTRAP ######## */
 /*Color variables*/
 /*gray variables*/
@@ -90,7 +81,7 @@ License        :   Licensed under ThemeForest License
 /*black variables*/
 /*shadow variables*/
 html {
-  font-family: sans-serif;
+  font-family: 'Cairo', sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
@@ -10178,8 +10169,8 @@ a.close.disabled {
 /* ############### PAGE LAYOUT STYLES ############### */
 /* ###### 6.3 Global  ###### */
 body {
-  font-family: "Roboto", sans-serif; }
-
+    font-family: 'Cairo', sans-serif;
+}
 .main-body, .main-dashboard {
   min-height: 100vh;
   display: flex;

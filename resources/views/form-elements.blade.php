@@ -502,7 +502,8 @@
 											<div class="input-group-text">
 												<i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>
 											</div>
-										</div><input class="form-control" id="datetimepicker2" type="text" value="2018-12-20 21:05">
+										</div>
+                                        <input class="form-control" id="datetimepicker2" type="text" value="2018-12-20 21:05">
 									</div>
 								</div>
 							</div>

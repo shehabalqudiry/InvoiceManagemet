@@ -81,7 +81,7 @@
                         data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('sections.store') }}" method="post" id="create-section">
+                    <form action="{{ route('sections.store') }}" method="post" id="create-section-form">
                         @csrf
                         <div class="form-group">
                             <label for="recipient-name" class="col-form-label">إسم القسم:</label>
@@ -94,7 +94,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn ripple btn-primary" type="button" onclick="event.preventDefault();document.getElementById('create-section').submit();">تأكيد</button>
+                    <button class="btn ripple btn-primary" type="button" onclick="event.preventDefault();document.getElementById('create-section-form').submit();">تأكيد</button>
                     <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إغلاق</button>
                 </div>
             </div>
@@ -103,10 +103,6 @@
     <!-- End Modal effects-->
 </div>
 <!-- row closed -->
-</div>
-<!-- Container closed -->
-</div>
-<!-- main-content closed -->
 @endsection
 @section('js')
 <!--Internal  Datepicker js -->

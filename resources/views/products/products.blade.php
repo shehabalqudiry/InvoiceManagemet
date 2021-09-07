@@ -1,14 +1,14 @@
 @extends('layouts.master')
 @section('title', "المنتجات")
 @section('css')
-<!-- Internal Select2 css -->
-<link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
-<!--Internal  Datetimepicker-slider css -->
-<link href="{{URL::asset('assets/plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css')}}" rel="stylesheet">
-<link href="{{URL::asset('assets/plugins/jquery-simple-datetimepicker/jquery.simple-dtpicker.css')}}" rel="stylesheet">
-<link href="{{URL::asset('assets/plugins/pickerjs/picker.min.css')}}" rel="stylesheet">
+{{-- Internal Select2 css --}}
+<link href="{{asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+{{--Internal  Datetimepicker-slider css --}}
+<link href="{{asset('assets/plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css')}}" rel="stylesheet">
+<link href="{{asset('assets/plugins/jquery-simple-datetimepicker/jquery.simple-dtpicker.css')}}" rel="stylesheet">
+<link href="{{asset('assets/plugins/pickerjs/picker.min.css')}}" rel="stylesheet">
 <!-- Internal Spectrum-colorpicker css -->
-<link href="{{URL::asset('assets/plugins/spectrum-colorpicker/spectrum.css')}}" rel="stylesheet">
+<link href="{{asset('assets/plugins/spectrum-colorpicker/spectrum.css')}}" rel="stylesheet">
 @endsection
 @section('page-header')
 <!-- breadcrumb -->
@@ -121,10 +121,6 @@
     </div>
 </div>
 <!-- End Modal effects-->
-</div>
-<!-- Container closed -->
-</div>
-<!-- main-content closed -->
 @endsection
 @section('js')
 <!--Internal  Datepicker js -->
