@@ -19,7 +19,7 @@
 <div class="card mg-b-20" id="tabs-style3">
     <div class="card-body">
         <div class="main-content-label mb-4">
-            تفاصيل الفاتورة رقم : {{ $invoice->invoice_number }}
+            تفاصيل الفاتورة رقم : {{ $invoice->invoice_number }} @if(!$invoice->deleted_at) <span class="badge badge-danger">مؤرشفة</span> @endif 
         </div>
         @include('layouts.alert')
         <div class="tabs-style-3">
@@ -73,23 +73,28 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="tab12">
-                        <div
-                            class="alert mb-4 @if($invoice->value_status == 1) alert-success @elseif($invoice->value_status == 2) alert-danger @else alert-warning @endif">
-                            <p>التاريخ : <strong>{{ $invoice->invoice_date }}</strong></p>
-                            <p>الحالة :
-                                <strong>
-                                    @if($invoice->value_status == 1)
-                                    <span class="text-success">{{ $invoice->status }}</span>
-                                    @elseif($invoice->value_status == 2)
-                                    <span class="text-danger">{{ $invoice->status }}</span>
-                                    @else
-                                    <span class="text-warning">{{ $invoice->status }}</span>
-                                    @endif
-                                </strong>
-                            </p>
-                            <p>تاريخ الاستحقاق : <strong>{{ $invoice->due_date }}</strong></p>
-                            <p>مبلغ التحصيل : <strong>{{ $invoice->amount_collection }} جنيه مصري</strong></p>
+                        @foreach ($invoice->details as $detail)
+                        <div class="row alert mb-4 @if($detail->value_status == 1) alert-success @elseif($detail->value_status == 2) alert-danger @else alert-warning @endif">
+                            <div class="col">
+                                <p>التاريخ : <strong>{{ $invoice->invoice_date }}</strong></p>
+                                <p>الحالة :
+                                    <strong>
+                                        @if($detail->value_status == 1)
+                                        <span class="text-success">{{ $detail->status }}</span>
+                                        @elseif($detail->value_status == 2)
+                                        <span class="text-danger">{{ $detail->status }}</span>
+                                        @else
+                                        <span class="text-warning">{{ $detail->status }}</span>
+                                        @endif
+                                    </strong>
+                                </p>
+                            </div>
+                            <div class="col">
+                                <p>{{ $detail->payment_date ? 'تاريخ الدفع' : 'تاريخ الاستحقاق' }} : <strong>{{ $detail->payment_date ?? $invoice->due_date }}</strong></p>
+                                <p>مبلغ التحصيل : <strong>{{ $detail->part_paid ?? $invoice->amount_collection }} جنيه مصري</strong></p>
+                            </div>
                         </div>
+                        @endforeach
                     </div>
                     <div class="tab-pane" id="tab13">
                         <div class="d-flex justify-content-between">

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceController extends Controller
 {
@@ -83,8 +84,9 @@ class InvoiceController extends Controller
         }
     }
 
-    public function show(Invoice $invoice)
+    public function show($id)
     {
+        $invoice = Invoice::withTrashed()->findOrFail($id)->first();
         $attachs = $invoice->attachs;
         return view('invoices.details', compact(['invoice', 'attachs']));
     }
@@ -154,9 +156,45 @@ class InvoiceController extends Controller
         }
     }
 
+    public function archivePage()
+    {
+        $invoices = Invoice::onlyTrashed()->get();
+        return view('invoices.archive', compact(['invoices']));
+    }
+    public function unArchive($id)
+    {
+        try {
+            Invoice::withTrashed()->findOrFail($id)->restore();
+            return redirect()->back()->with('success', 'تم إلغاء ارشفة الفاتورة');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+        
+    }
+
+    public function archive(Request $request)
+    {
+        try {
+            $invoice = Invoice::findOrFail($request->invoice_id);
+            $invoice->delete();
+            return redirect()->back()->with('success', 'تم نقل الفاتورة الي الارشيف');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
     public function destroy(Invoice $invoice)
     {
-        //
+        try {
+            if (!empty($invoice->attachs->invoice_number)) {
+                Storage::disk('local')->deleteDirectory($invoice->attachs->invoice_number);
+            }
+            $invoice->forceDelete();
+            session()->flash('invoice_delete');
+            return redirect()->back()->with('success', 'تم حذف الفاتورة');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
 
@@ -164,5 +202,63 @@ class InvoiceController extends Controller
     {
         $products = Product::where('section_id', $section_id)->pluck('product_name', 'id');
         return json_encode($products);
+    }
+
+    public function editPayment($id)
+    {
+        $invoice = Invoice::findOrFail($id);
+        return view('invoices.payment.edit', compact('invoice'));
+    }
+
+    public function updatePayment($id, Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $invoice = Invoice::findOrFail($id);
+            $invoice->update([
+                'value_status'      => $request->status,
+                'status'            => $request->status == 1 ? 'مدفوعه' : 'مدفوعة جزئيا',
+                'payment_date'      => $request->payment_date,
+                'total'             => $request->part_paid ? $invoice->total - $request->part_paid : $invoice->total,
+            ]);
+            InvoiceDetail::create([
+                'invoice_id'        => $invoice->id,
+                'invoice_number'    => $invoice->invoice_number,
+                'section_id'        => $invoice->section_id,
+                'product_id'        => $invoice->product_id,
+                'value_status'      => $request->status,
+                'status'            => $request->status == 1 ? 'مدفوعه' : 'مدفوعة جزئيا',
+                'note'              => $invoice->note,
+                'user'              => auth()->user()->name,
+                'payment_date'      => $request->payment_date,
+            ]);
+            DB::commit();
+
+            session()->flash('success', 'تم حفظ البيانات بنجاح');
+            return redirect()->route('invoices.index');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            session()->flash('error', $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function paid(){
+        $invoices = Invoice::withTrashed()->where('value_status', 1)->get();
+        return view('invoices.paid', compact(['invoices']));
+    }
+    public function unpaid(){
+        $invoices = Invoice::withTrashed()->where('value_status', 2)->get();
+        return view('invoices.unpaid', compact(['invoices']));
+    }
+    public function part_paid(){
+        $invoices = Invoice::withTrashed()->where('value_status', 3)->get();
+        return view('invoices.part_paid', compact(['invoices']));
+    }
+
+    public function print_info($id)
+    {
+        $invoice = Invoice::withTrashed()->findOrFail($id);
+        return view('invoices.print_invoice', compact(['invoice']));
     }
 }

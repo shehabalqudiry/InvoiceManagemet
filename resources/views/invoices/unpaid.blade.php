@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'قائمة الفواتير')
+@section('title', 'الفواتير الغير مدفوعه')
 @section('css')
 
 @endsection
@@ -8,8 +8,7 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة
-                الفواتير</span>
+            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ الفواتير الغير مدفوعه</span>
         </div>
     </div>
     <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
@@ -27,7 +26,7 @@
             @include('layouts.alert')
             <div class="card-header pb-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">قائمة الفواتير</h4>
+                    <h4 class="card-title mg-b-0">الفواتير الغير مدفوعه</h4>
                 </div>
             </div>
             <div class="card-body">
@@ -56,7 +55,8 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a href="{{ route('invoices.show', $invoice->id) }}">
-                                        {{ $invoice->invoice_number }}
+                                        {{ $invoice->invoice_number }} @if($invoice->deleted_at) <span
+                                            class="badge badge-danger">مؤرشفة</span> @endif
                                     </a>
                                 </td>
                                 <td>{{ $invoice->invoice_date }}</td>
@@ -84,21 +84,20 @@
                                             class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
                                             id="dropdownMenuButton" type="button">
                                             <i class="fas fa-caret-right ml-3"></i>
-                                            العمليات 
+                                            العمليات
                                         </button>
                                         <div class="dropdown-menu tx-13">
-                                            <a class="dropdown-item"
-                                                href="{{ route('invoices.show', $invoice->id) }}">
+                                            <a class="dropdown-item" href="{{ route('invoices.show', $invoice->id) }}">
                                                 <i class="fa fa-eye ml-2"></i> عرض
                                             </a>
-                                            <a class="dropdown-item"
-                                                href="{{ route('invoices.edit', $invoice->id) }}">
+                                            <a class="dropdown-item" href="{{ route('invoices.edit', $invoice->id) }}">
                                                 <i class="fa fa-edit ml-2"></i> تعديل
                                             </a>
                                             <a class="dropdown-item"
                                                 href="{{ route('invoices.editPayment', $invoice->id) }}">
                                                 <i class="fas fa-dollar-sign ml-2"></i> تعديل
-                                             حالة الدفع</a>
+                                                حالة الدفع</a>
+                                            @if(!$invoice->deleted_at)
                                             <button class="dropdown-item"
                                                 onclick="event.preventDefault();document.getElementById('archive-invoice_{{ $invoice->id }}').submit();">
                                                 <i class="fas fa-file ml-2"></i> نقل الي الارشيف
@@ -108,14 +107,25 @@
                                                 @csrf
                                                 <input type="text" hidden value="{{ $invoice->id }}" name="invoice_id">
                                             </form>
+                                            @else
+                                            <button class="dropdown-item"
+                                                onclick="event.preventDefault();document.getElementById('unarchive-invoice_{{ $invoice->id }}').submit();">
+                                                <i class="fas fa-file ml-2"></i> إلغاء ارشفة الفاتورة
+                                            </button>
+                                            <form class="d-none"
+                                                action="{{ route('invoices.unarchive', $invoice->id) }}" method="post"
+                                                id="unarchive-invoice_{{ $invoice->id }}">
+                                                @csrf
+                                            </form>
+
+                                            @endif
                                             <a class="dropdown-item" href="{{ route('invoices.print_info',$invoice->id) }}">
                                                 <i class="fa fa-print ml-2"></i> طباعة الفاتورة
-
+                                            
                                             </a>
                                             <a class="modal-effect dropdown-item" data-effect="effect-sign"
                                                 data-toggle="modal" href="#delete_{{ $invoice->id }}">
                                                 <i class="fa fa-trash ml-2"></i> حذف نهائي
-
                                             </a>
                                         </div>
                                     </div>

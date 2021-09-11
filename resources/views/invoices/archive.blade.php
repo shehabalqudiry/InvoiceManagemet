@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'قائمة الفواتير')
+@section('title', 'قائمة الفواتير المؤرشفة')
 @section('css')
 
 @endsection
@@ -8,8 +8,7 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة
-                الفواتير</span>
+            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة الفواتير المؤرشفة</span>
         </div>
     </div>
     <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
@@ -24,10 +23,10 @@
     <!--div-->
     <div class="col">
         <div class="card mg-b-20">
-            @include('layouts.alert')
             <div class="card-header pb-0">
+                @include('layouts.alert')
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">قائمة الفواتير</h4>
+                    <h4 class="card-title mg-b-0">قائمة الفواتير المؤرشفة</h4>
                 </div>
             </div>
             <div class="card-body">
@@ -48,6 +47,7 @@
                                 <th class="border-bottom-0">الضريبة</th>
                                 <th class="border-bottom-0">الأجمالي</th>
                                 <th class="border-bottom-0">الحالة</th>
+                                <th class="border-bottom-0">ملاحظات</th>
                                 <th class="border-bottom-0">الإعدادات</th>
                             </tr>
                         </thead>
@@ -78,39 +78,34 @@
                                     <span class="text-warning">{{ $invoice->status }}</span>
                                     @endif
                                 </td>
+                                <td>{{ $invoice->note }}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button aria-expanded="false" aria-haspopup="true"
                                             class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
                                             id="dropdownMenuButton" type="button">
                                             <i class="fas fa-caret-right ml-3"></i>
-                                            العمليات 
+                                            العمليات
                                         </button>
                                         <div class="dropdown-menu tx-13">
-                                            <a class="dropdown-item"
-                                                href="{{ route('invoices.show', $invoice->id) }}">
+                                            <a class="dropdown-item" href="{{ route('invoices.show', $invoice->id) }}">
                                                 <i class="fa fa-eye ml-2"></i> عرض
                                             </a>
-                                            <a class="dropdown-item"
-                                                href="{{ route('invoices.edit', $invoice->id) }}">
+                                            <a class="dropdown-item" href="{{ route('invoices.edit', $invoice->id) }}">
                                                 <i class="fa fa-edit ml-2"></i> تعديل
                                             </a>
-                                            <a class="dropdown-item"
-                                                href="{{ route('invoices.editPayment', $invoice->id) }}">
-                                                <i class="fas fa-dollar-sign ml-2"></i> تعديل
-                                             حالة الدفع</a>
+                                    
                                             <button class="dropdown-item"
-                                                onclick="event.preventDefault();document.getElementById('archive-invoice_{{ $invoice->id }}').submit();">
-                                                <i class="fas fa-file ml-2"></i> نقل الي الارشيف
+                                                onclick="event.preventDefault();document.getElementById('unarchive-invoice_{{ $invoice->id }}').submit();">
+                                                <i class="fas fa-file ml-2"></i> إلغاء ارشفة الفاتورة
                                             </button>
-                                            <form class="d-none" action="{{ route('invoices.archive', $invoice->id) }}"
-                                                method="post" id="archive-invoice_{{ $invoice->id }}">
+                                            <form class="d-none" action="{{ route('invoices.unarchive', $invoice->id) }}"
+                                                method="post" id="unarchive-invoice_{{ $invoice->id }}">
                                                 @csrf
-                                                <input type="text" hidden value="{{ $invoice->id }}" name="invoice_id">
                                             </form>
                                             <a class="dropdown-item" href="{{ route('invoices.print_info',$invoice->id) }}">
                                                 <i class="fa fa-print ml-2"></i> طباعة الفاتورة
-
+                                            
                                             </a>
                                             <a class="modal-effect dropdown-item" data-effect="effect-sign"
                                                 data-toggle="modal" href="#delete_{{ $invoice->id }}">
@@ -120,6 +115,7 @@
                                         </div>
                                     </div>
                                 </td>
+
                             </tr>
                             <!-- Delete Modal effects -->
                             <div class="modal" id="delete_{{ $invoice->id }}">
@@ -131,7 +127,7 @@
                                                 type="button"><span aria-hidden="true">&times;</span></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ route('invoices.destroy', $invoice->id) }}" method="post"
+                                            <form action="{{ route('invoices.destroy', 'test') }}" method="post"
                                                 id="delete-invoice_{{ $invoice->id }}">
                                                 @csrf
                                                 @method('DELETE')
