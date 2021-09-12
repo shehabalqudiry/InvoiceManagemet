@@ -10,12 +10,16 @@
         <div class="d-flex">
             <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة
                 الفواتير</span>
-            </div>
         </div>
-        <div>
-            <a class="btn btn-primary" href="{{ route('invoices.create') }}">اضافة فاتورة</a>
-            <a class="btn btn-success" href="{{ route('invoices.export') }}">تصدير Excel</a>
-        </div>
+    </div>
+    <div>
+        @can('invoice-create')
+        <a class="btn btn-primary" href="{{ route('invoices.create') }}">اضافة فاتورة</a>
+        @endcan
+        @can('invoice-export')
+        <a class="btn btn-success" href="{{ route('invoices.export') }}">تصدير Excel</a>
+        @endcan
+    </div>
 </div>
 <!-- breadcrumb -->
 @endsection
@@ -85,21 +89,22 @@
                                             class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
                                             id="dropdownMenuButton" type="button">
                                             <i class="fas fa-caret-right ml-3"></i>
-                                            العمليات 
+                                            العمليات
                                         </button>
                                         <div class="dropdown-menu tx-13">
-                                            <a class="dropdown-item"
-                                                href="{{ route('invoices.show', $invoice->id) }}">
+                                            <a class="dropdown-item" href="{{ route('invoices.show', $invoice->id) }}">
                                                 <i class="fa fa-eye ml-2"></i> عرض
                                             </a>
-                                            <a class="dropdown-item"
-                                                href="{{ route('invoices.edit', $invoice->id) }}">
+                                            @can('invoice-edit')
+                                            <a class="dropdown-item" href="{{ route('invoices.edit', $invoice->id) }}">
                                                 <i class="fa fa-edit ml-2"></i> تعديل
                                             </a>
                                             <a class="dropdown-item"
                                                 href="{{ route('invoices.editPayment', $invoice->id) }}">
                                                 <i class="fas fa-dollar-sign ml-2"></i> تعديل
-                                             حالة الدفع</a>
+                                                حالة الدفع</a>
+                                            @endcan
+                                            @can('invoice-delete')
                                             <button class="dropdown-item"
                                                 onclick="event.preventDefault();document.getElementById('archive-invoice_{{ $invoice->id }}').submit();">
                                                 <i class="fas fa-file ml-2"></i> نقل الي الارشيف
@@ -109,19 +114,26 @@
                                                 @csrf
                                                 <input type="text" hidden value="{{ $invoice->id }}" name="invoice_id">
                                             </form>
-                                            <a class="dropdown-item" href="{{ route('invoices.print_info',$invoice->id) }}">
+                                            @endcan
+                                            @can('invoice-print')
+                                            <a class="dropdown-item"
+                                                href="{{ route('invoices.print_info',$invoice->id) }}">
                                                 <i class="fa fa-print ml-2"></i> طباعة الفاتورة
 
                                             </a>
+                                            @endcan
+                                            @can('invoice-delete')
                                             <a class="modal-effect dropdown-item" data-effect="effect-sign"
                                                 data-toggle="modal" href="#delete_{{ $invoice->id }}">
                                                 <i class="fa fa-trash ml-2"></i> حذف نهائي
 
                                             </a>
+                                            @endcan
                                         </div>
                                     </div>
                                 </td>
                             </tr>
+                            @can('invoice-delete')
                             <!-- Delete Modal effects -->
                             <div class="modal" id="delete_{{ $invoice->id }}">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -150,6 +162,7 @@
                                 </div>
                             </div>
                             <!-- End Modal effects-->
+                            @endcan
                             @endforeach
                         </tbody>
 

@@ -8,11 +8,9 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ الفواتير الغير مدفوعه</span>
+            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ الفواتير
+                الغير مدفوعه</span>
         </div>
-    </div>
-    <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
-        <a class="btn btn-block btn-primary" href="{{ route('invoices.create') }}">اضافة فاتورة</a>
     </div>
 </div>
 <!-- breadcrumb -->
@@ -90,6 +88,7 @@
                                             <a class="dropdown-item" href="{{ route('invoices.show', $invoice->id) }}">
                                                 <i class="fa fa-eye ml-2"></i> عرض
                                             </a>
+                                            @can('invoice-edit')
                                             <a class="dropdown-item" href="{{ route('invoices.edit', $invoice->id) }}">
                                                 <i class="fa fa-edit ml-2"></i> تعديل
                                             </a>
@@ -97,6 +96,8 @@
                                                 href="{{ route('invoices.editPayment', $invoice->id) }}">
                                                 <i class="fas fa-dollar-sign ml-2"></i> تعديل
                                                 حالة الدفع</a>
+                                            @endcan
+                                            @can('invoice-delete')
                                             @if(!$invoice->deleted_at)
                                             <button class="dropdown-item"
                                                 onclick="event.preventDefault();document.getElementById('archive-invoice_{{ $invoice->id }}').submit();">
@@ -117,20 +118,26 @@
                                                 id="unarchive-invoice_{{ $invoice->id }}">
                                                 @csrf
                                             </form>
-
                                             @endif
-                                            <a class="dropdown-item" href="{{ route('invoices.print_info',$invoice->id) }}">
+                                            @endcan
+                                            @can('invoice-print')
+                                            <a class="dropdown-item"
+                                                href="{{ route('invoices.print_info',$invoice->id) }}">
                                                 <i class="fa fa-print ml-2"></i> طباعة الفاتورة
-                                            
+
                                             </a>
+                                            @endcan
+                                            @can('invoice-delete')
                                             <a class="modal-effect dropdown-item" data-effect="effect-sign"
                                                 data-toggle="modal" href="#delete_{{ $invoice->id }}">
                                                 <i class="fa fa-trash ml-2"></i> حذف نهائي
                                             </a>
+                                            @endcan
                                         </div>
                                     </div>
                                 </td>
                             </tr>
+                            @can('invoice-delete')
                             <!-- Delete Modal effects -->
                             <div class="modal" id="delete_{{ $invoice->id }}">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -159,6 +166,7 @@
                                 </div>
                             </div>
                             <!-- End Modal effects-->
+                            @endcan
                             @endforeach
                         </tbody>
 

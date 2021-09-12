@@ -104,9 +104,11 @@
                         </table>
                     </div>
                     <hr class="mg-b-40">
+                    @can('invoice-print')
                     <button id="print_button" onclick="printDiv()" class="btn btn-danger float-left mt-3 mr-2">
                         <i class="mdi mdi-printer ml-1"></i>طباعة
                     </button>
+                    @endcan
                 </div>
             </div>
         </div>

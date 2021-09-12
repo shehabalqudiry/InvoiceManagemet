@@ -16,6 +16,14 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:invoice-list|invoice-create|invoice-edit|invoice-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:invoice-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:invoice-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:invoice-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $invoices = Invoice::all();
@@ -236,7 +244,6 @@ class InvoiceController extends Controller
                 'payment_date'      => $request->payment_date,
             ]);
             DB::commit();
-
             session()->flash('success', 'تم حفظ البيانات بنجاح');
             return redirect()->route('invoices.index');
         } catch (\Exception $e) {

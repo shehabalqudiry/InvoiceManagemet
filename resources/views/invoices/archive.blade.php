@@ -11,9 +11,6 @@
             <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة الفواتير المؤرشفة</span>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
-        <a class="btn btn-block btn-primary" href="{{ route('invoices.create') }}">اضافة فاتورة</a>
-    </div>
 </div>
 <!-- breadcrumb -->
 @endsection
@@ -81,8 +78,7 @@
                                 <td>{{ $invoice->note }}</td>
                                 <td>
                                     <div class="dropdown">
-                                        <button aria-expanded="false" aria-haspopup="true"
-                                            class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
+                                        <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
                                             id="dropdownMenuButton" type="button">
                                             <i class="fas fa-caret-right ml-3"></i>
                                             العمليات
@@ -91,27 +87,37 @@
                                             <a class="dropdown-item" href="{{ route('invoices.show', $invoice->id) }}">
                                                 <i class="fa fa-eye ml-2"></i> عرض
                                             </a>
+                                            @can('invoice-edit')
                                             <a class="dropdown-item" href="{{ route('invoices.edit', $invoice->id) }}">
                                                 <i class="fa fa-edit ml-2"></i> تعديل
                                             </a>
-                                    
+                                            <a class="dropdown-item" href="{{ route('invoices.editPayment', $invoice->id) }}">
+                                                <i class="fas fa-dollar-sign ml-2"></i> تعديل
+                                                حالة الدفع</a>
+                                            @endcan
+                                            @can('invoice-delete')
                                             <button class="dropdown-item"
                                                 onclick="event.preventDefault();document.getElementById('unarchive-invoice_{{ $invoice->id }}').submit();">
                                                 <i class="fas fa-file ml-2"></i> إلغاء ارشفة الفاتورة
                                             </button>
-                                            <form class="d-none" action="{{ route('invoices.unarchive', $invoice->id) }}"
-                                                method="post" id="unarchive-invoice_{{ $invoice->id }}">
+                                            <form class="d-none" action="{{ route('invoices.unarchive', $invoice->id) }}" method="post"
+                                                id="unarchive-invoice_{{ $invoice->id }}">
                                                 @csrf
                                             </form>
+                                            @endcan
+                                            @can('invoice-print')
                                             <a class="dropdown-item" href="{{ route('invoices.print_info',$invoice->id) }}">
                                                 <i class="fa fa-print ml-2"></i> طباعة الفاتورة
-                                            
+
                                             </a>
-                                            <a class="modal-effect dropdown-item" data-effect="effect-sign"
-                                                data-toggle="modal" href="#delete_{{ $invoice->id }}">
+                                            @endcan
+                                            @can('invoice-delete')
+                                            <a class="modal-effect dropdown-item" data-effect="effect-sign" data-toggle="modal"
+                                                href="#delete_{{ $invoice->id }}">
                                                 <i class="fa fa-trash ml-2"></i> حذف نهائي
 
                                             </a>
+                                            @endcan
                                         </div>
                                     </div>
                                 </td>

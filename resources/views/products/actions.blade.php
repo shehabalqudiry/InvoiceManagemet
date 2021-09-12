@@ -1,4 +1,5 @@
-<!-- Create Modal effects -->
+@can('product-edit')
+<!-- Edit Modal effects -->
 <div class="modal" id="edit_{{ $product->id }}">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-content-demo">
@@ -40,7 +41,8 @@
     </div>
 </div>
 <!-- End Modal effects-->
-
+@endcan
+@can('product-delete')
 <!-- Delete Modal effects -->
 <div class="modal" id="delete_{{ $product->id }}">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -53,7 +55,7 @@
                 <form action="{{ route('products.destroy', $product->id) }}" method="post" id="delete-product">
                     @csrf
                     @method('delete')
-                        <label class="col-form-label">هل انت متأكد من حذف المنتج ؟</label>    
+                        <label class="col-form-label">هل انت متأكد من حذف المنتج ؟</label>
                 </form>
             </div>
             <div class="modal-footer">
@@ -65,3 +67,4 @@
     </div>
 </div>
 <!-- End Modal effects-->
+@endcan

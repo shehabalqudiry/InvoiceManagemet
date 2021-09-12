@@ -1,4 +1,5 @@
-<!-- Create Modal effects -->
+@can('section-edit')
+<!-- Edit Modal effects -->
 <div class="modal" id="edit_{{ $section->id }}">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-content-demo">
@@ -29,8 +30,9 @@
     </div>
 </div>
 <!-- End Modal effects-->
-
-<!-- Create Modal effects -->
+@endcan
+@can('section-delete')
+<!-- Delete Modal effects -->
 <div class="modal" id="delete_{{ $section->id }}">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-content-demo">
@@ -42,7 +44,7 @@
                 <form action="{{ route('sections.destroy', $section->id) }}" method="post" id="delete-section">
                     @csrf
                     @method('delete')
-                        <label class="col-form-label">هل انت متأكد من حذف القسم ؟</label>    
+                        <label class="col-form-label">هل انت متأكد من حذف القسم ؟</label>
                 </form>
             </div>
             <div class="modal-footer">
@@ -54,3 +56,4 @@
     </div>
 </div>
 <!-- End Modal effects-->
+@endcan

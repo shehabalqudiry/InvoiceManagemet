@@ -19,7 +19,7 @@
 <div class="card mg-b-20" id="tabs-style3">
     <div class="card-body">
         <div class="main-content-label mb-4">
-            تفاصيل الفاتورة رقم : {{ $invoice->invoice_number }} @if($invoice->deleted_at) <span class="badge badge-danger">مؤرشفة</span> @endif 
+            تفاصيل الفاتورة رقم : {{ $invoice->invoice_number }} @if($invoice->deleted_at) <span class="badge badge-danger">مؤرشفة</span> @endif
         </div>
         @include('layouts.alert')
         <div class="tabs-style-3">
@@ -121,18 +121,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @dd($invoice->attach->all()) --}}
+
                                     @foreach ($attachs as $attach)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $attach->file_name }}</td>
                                         <td>{{ $attach->invoice_number }}</td>
                                         <td>
+                                            @can('invoice-delete')
                                             <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-sign"
                                                 data-toggle="modal" href="#delete_{{ $attach->id }}">
                                                 <i class="fa fa-trash"></i>
                                             </a>
+                                            @endcan
                                         </td>
+                                        @can('invoice-delete')
                                         <!-- Delete Modal effects -->
                                         <div class="modal" id="delete_{{ $attach->id }}">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -167,6 +170,7 @@
                                             </div>
                                         </div>
                                         <!-- End Modal effects-->
+                                        @endcan
                                     </tr>
                                     @endforeach
                                 </tbody>

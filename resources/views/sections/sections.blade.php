@@ -15,10 +15,12 @@
                 الأقسام</span>
         </div>
     </div>
+    @can('product-create')
     <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
         <a class="modal-effect btn btn-block btn-primary" data-effect="effect-sign" data-toggle="modal"
             href="#create-section">اضافة قسم</a>
     </div>
+    @endcan
 </div>
 <!-- breadcrumb -->
 @endsection
@@ -55,12 +57,16 @@
                                     <td>{{ $section->created_by }}</td>
                                     <td>{{ $section->description }}</td>
                                     <td>
+                                        @can('section-create')
                                         <a class="modal-effect btn btn-sm btn-success ml-2" data-effect="effect-sign" data-toggle="modal" href="#edit_{{ $section->id }}">
                                             <i class="fa fa-edit"></i>
                                         </a>
+                                        @endcan
+                                        @can('section-delete')
                                         <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-sign" data-toggle="modal" href="#delete_{{ $section->id }}">
                                             <i class="fa fa-trash"></i>
                                         </a>
+                                        @endcan
                                     </td>
                                 </tr>
                                 @include('sections.actions')
@@ -72,6 +78,7 @@
         </div>
     </div>
     <!--/div-->
+    @can('section-create')
     <!-- Create Modal effects -->
     <div class="modal" id="create-section">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -101,6 +108,7 @@
         </div>
     </div>
     <!-- End Modal effects-->
+    @endcan
 </div>
 <!-- row closed -->
 @endsection

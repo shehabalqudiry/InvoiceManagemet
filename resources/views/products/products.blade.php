@@ -19,10 +19,12 @@
                 المنتجات</span>
         </div>
     </div>
+    @can('product-create')
     <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
         <a class="modal-effect btn btn-block btn-primary" data-effect="effect-sign" data-toggle="modal"
             href="#create-product">اضافة منتج</a>
     </div>
+    @endcan
 </div>
 <!-- breadcrumb -->
 @endsection
@@ -59,14 +61,18 @@
                                 <td>{{ $product->section->section_name }}</td>
                                 <td>{{ $product->description }}</td>
                                 <td>
+                                    @can('product-edit')
                                     <a class="modal-effect btn btn-sm btn-success ml-2" data-effect="effect-sign"
                                         data-toggle="modal" href="#edit_{{ $product->id }}">
                                         <i class="fa fa-edit"></i>
                                     </a>
+                                    @endcan
+                                    @can('product-delete')
                                     <a class="modal-effect btn btn-sm btn-danger" data-effect="effect-sign"
                                         data-toggle="modal" href="#delete_{{ $product->id }}">
                                         <i class="fa fa-trash"></i>
                                     </a>
+                                    @endcan
                                 </td>
                             </tr>
                             @include('products.actions')
@@ -80,13 +86,14 @@
     <!--/div-->
 </div>
 <!-- row closed -->
+@can('product-create')
 <!-- Create Modal effects -->
 <div class="modal" id="create-product">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-content-demo">
             <div class="modal-header">
-                <h6 class="modal-title">إضافة منتج جديد</h6><button aria-label="Close" class="close" data-dismiss="modal"
-                    type="button"><span aria-hidden="true">&times;</span></button>
+                <h6 class="modal-title">إضافة منتج جديد</h6><button aria-label="Close" class="close"
+                    data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('products.store') }}" method="post" id="createProduct">
@@ -121,6 +128,7 @@
     </div>
 </div>
 <!-- End Modal effects-->
+@endcan
 @endsection
 @section('js')
 <!--Internal  Datepicker js -->
