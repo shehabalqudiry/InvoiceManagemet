@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoicesExport;
 use App\Models\Invoice;
 use App\Models\InvoiceAttachment;
 use App\Models\InvoiceDetail;
 use App\Models\Product;
 use App\Models\Section;
+use App\Notifications\AddInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
 {
@@ -72,8 +75,9 @@ class InvoiceController extends Controller
                 $image->storeAs('invoices/' . $invoice->invoice_number, $image->getClientOriginalName());
             }
 
+            $user = auth()->user();
+            $user->notify(new AddInvoice($invoice->id));
             DB::commit();
-
             session()->flash('success', 'تم حفظ البيانات بنجاح');
             return redirect()->route('invoices.index');
         } catch (\Exception $e) {
@@ -86,7 +90,7 @@ class InvoiceController extends Controller
 
     public function show($id)
     {
-        $invoice = Invoice::withTrashed()->findOrFail($id)->first();
+        $invoice = Invoice::findOrFail($id);
         $attachs = $invoice->attachs;
         return view('invoices.details', compact(['invoice', 'attachs']));
     }
@@ -169,7 +173,6 @@ class InvoiceController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-        
     }
 
     public function archive(Request $request)
@@ -243,15 +246,18 @@ class InvoiceController extends Controller
         }
     }
 
-    public function paid(){
+    public function paid()
+    {
         $invoices = Invoice::withTrashed()->where('value_status', 1)->get();
         return view('invoices.paid', compact(['invoices']));
     }
-    public function unpaid(){
+    public function unpaid()
+    {
         $invoices = Invoice::withTrashed()->where('value_status', 2)->get();
         return view('invoices.unpaid', compact(['invoices']));
     }
-    public function part_paid(){
+    public function part_paid()
+    {
         $invoices = Invoice::withTrashed()->where('value_status', 3)->get();
         return view('invoices.part_paid', compact(['invoices']));
     }
@@ -260,5 +266,10 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::withTrashed()->findOrFail($id);
         return view('invoices.print_invoice', compact(['invoice']));
+    }
+
+    public function export()
+    {
+        return Excel::download(new InvoicesExport, 'invoices.xlsx');
     }
 }

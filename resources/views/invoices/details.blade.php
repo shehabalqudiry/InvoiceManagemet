@@ -19,7 +19,7 @@
 <div class="card mg-b-20" id="tabs-style3">
     <div class="card-body">
         <div class="main-content-label mb-4">
-            تفاصيل الفاتورة رقم : {{ $invoice->invoice_number }} @if(!$invoice->deleted_at) <span class="badge badge-danger">مؤرشفة</span> @endif 
+            تفاصيل الفاتورة رقم : {{ $invoice->invoice_number }} @if($invoice->deleted_at) <span class="badge badge-danger">مؤرشفة</span> @endif 
         </div>
         @include('layouts.alert')
         <div class="tabs-style-3">
@@ -60,12 +60,12 @@
                                 <p>المنتج : <strong>{{ $invoice->product->product_name }}</strong></p>
                             </div>
                             <div class="col-4">
-                                <p>مبلغ التحصيل : <strong>{{ $invoice->amount_collection }} جنيه مصري</strong></p>
-                                <p>العمولة : <strong>{{ $invoice->amount_commission }} جنيه مصري</strong></p>
-                                <p>الخصم : <strong>{{ $invoice->discount }} جنيه مصري</strong></p>
+                                <p>مبلغ التحصيل : <strong>{{ number_format($invoice->amount_collection, 2) }} جنيه مصري</strong></p>
+                                <p>العمولة : <strong>{{ number_format($invoice->amount_commission, 2) }} جنيه مصري</strong></p>
+                                <p>الخصم : <strong>-{{ number_format($invoice->discount, 2) }} جنيه مصري</strong></p>
                                 <p>نسبة الضريبة : <strong>{{ $invoice->rate_vat }}</strong></p>
-                                <p>قيمة الضريبة : <strong>{{ $invoice->value_vat }} جنيه مصري</strong></p>
-                                <p>الاجمالي شامل الضريبة : <strong>{{ $invoice->total }} جنيه مصري</strong></p>
+                                <p>قيمة الضريبة : <strong>{{ number_format($invoice->value_vat, 2) }} جنيه مصري</strong></p>
+                                <p>الاجمالي شامل الضريبة : <strong>{{ number_format($invoice->total, 2) }} جنيه مصري</strong></p>
                             </div>
                             <div class="col-4">
                                 <p>ملاحظات : <strong>{{ $invoice->note ? $invoice->note : 'لا توجد ملاحظات' }}</strong></p>
@@ -91,7 +91,7 @@
                             </div>
                             <div class="col">
                                 <p>{{ $detail->payment_date ? 'تاريخ الدفع' : 'تاريخ الاستحقاق' }} : <strong>{{ $detail->payment_date ?? $invoice->due_date }}</strong></p>
-                                <p>مبلغ التحصيل : <strong>{{ $detail->part_paid ?? $invoice->amount_collection }} جنيه مصري</strong></p>
+                                <p>مبلغ التحصيل : <strong>{{ $detail->part_paid ? number_format($detail->part_paid, 2) : number_format($invoice->amount_collection, 2) }} جنيه مصري</strong></p>
                             </div>
                         </div>
                         @endforeach

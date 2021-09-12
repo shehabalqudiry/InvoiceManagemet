@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('get-products/{id}', [InvoiceController::class, 'getProducts']);
     
     Route::get('invoices/print_info/{id}', [InvoiceController::class, 'print_info'])->name('invoices.print_info');
-    
+    Route::get('invoices_export/', [InvoiceController::class, 'export'])->name('invoices.export');
     Route::resource('attachs', InvoiceAttachmentController::class);
     
     Route::resource('sections', SectionController::class);
