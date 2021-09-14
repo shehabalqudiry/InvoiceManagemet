@@ -94,4 +94,12 @@ class UserController extends Controller
         return redirect()->route('users.index')
             ->with('success', 'تم حذف المستخدم');
     }
+
+    public function markAsRead(){
+        $read = auth()->user()->unreadNotifications;
+        if ($read) {
+            $read->markAsRead();
+            return back();
+        }
+    }
 }

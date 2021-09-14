@@ -28,6 +28,7 @@ class CreateInvoicesTable extends Migration
             $table->decimal('total', 8, 2);
             $table->string('status', 50);
             $table->integer('value_status');
+            $table->date('payment_date');
             $table->text('note')->nullable();
             $table->string('user');
             $table->softDeletes();

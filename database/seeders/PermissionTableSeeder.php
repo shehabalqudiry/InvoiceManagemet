@@ -55,6 +55,8 @@ class PermissionTableSeeder extends Seeder
             'report-edit'           => 'تعديل تقرير',
             'report-delete'         => 'حذف تقرير',
             // Settings
+            'notifications'         => 'الاشعارات',
+            // Settings
             'setting-list'          => 'الاعدادات',
             'setting-edit'          => 'تعديل الاعددات',
         ];

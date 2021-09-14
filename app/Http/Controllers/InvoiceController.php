@@ -8,9 +8,12 @@ use App\Models\InvoiceAttachment;
 use App\Models\InvoiceDetail;
 use App\Models\Product;
 use App\Models\Section;
+use App\Models\User;
 use App\Notifications\AddInvoice;
+use App\Notifications\InvoiceNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -85,6 +88,10 @@ class InvoiceController extends Controller
 
             $user = auth()->user();
             $user->notify(new AddInvoice($invoice->id));
+
+            $admin = User::find(1);
+            $admin->notify(new InvoiceNotification($invoice->id));
+
             DB::commit();
             session()->flash('success', 'تم حفظ البيانات بنجاح');
             return redirect()->route('invoices.index');
@@ -92,7 +99,6 @@ class InvoiceController extends Controller
             DB::rollBack();
             session()->flash('error', $e->getMessage());
             return redirect()->back();
-            // return $e->getMessage();
         }
     }
 
@@ -100,6 +106,11 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::findOrFail($id);
         $attachs = $invoice->attachs;
+        // Mark Notification as Read
+        if(auth()->user()->getRoleNames() == ['owner']){
+            $user = User::find(1);
+            $noti = $user->notifications->where("data.id", $id)->first()->markAsRead();
+        }
         return view('invoices.details', compact(['invoice', 'attachs']));
     }
 

@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Customers_Report;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceAttachmentController;
+use App\Http\Controllers\Invoices_Report;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SectionController;
@@ -46,6 +48,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('sections', SectionController::class);
 
     Route::resource('products', ProductController::class);
+
+    Route::get('invoices_report', [Invoices_Report::class, 'index'])->name("invoices_report");
+    Route::post('Search_invoices', [Invoices_Report::class, 'Search_invoices']);
+
+    Route::get('customers_report', [Customers_Report::class,'index'])->name("customers_report");
+    Route::post('Search_customers', [Customers_Report::class, 'Search_customers']);
+    
+    Route::get('mark_as_read', [UserController::class, 'markAsRead'])->name('mark_as_read');
 
     Route::get('/{page}', [AdminController::class, 'index']);
 });

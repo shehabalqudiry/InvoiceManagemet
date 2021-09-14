@@ -9,6 +9,7 @@
 <!-- Sidemenu css -->
 <link rel="stylesheet" href="{{asset('assets/css-rtl/sidemenu.css')}}">
 @yield('css')
+@livewireStyles
 <!-- Internal Data table css -->
 <link href="{{asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
 <link href="{{asset('assets/plugins/datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet">
